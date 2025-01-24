@@ -8,7 +8,7 @@ function App() {
   const [userList, setUserList] = useState<UserItem[]>([]);
 
   const getUserList = () => {
-    fetch("http://111.229.142.50:9981/admin/ctr/user")
+    fetch("https://fuguilu.us.kg/api/admin/user")
       // fetch("http://localhost:9981/admin/ctr/user")
       .then((res) => res.json())
       .then((res) => {
