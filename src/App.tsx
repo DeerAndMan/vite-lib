@@ -1,39 +1,34 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch } from "@store/store";
+import { useAppDispatch, useAppSelector } from "@store/store";
 import { userSlice } from "@store/slices";
 import "./App.css";
 
 import type { UserItem } from "./type";
 import React from "react";
-import { request } from "./api";
+import { getAllUser } from "@/api";
 
 function App() {
-  // const stateUser = useAppSelector((state) => state.user);
-  // console.log("stateUser", stateUser);
+  const stateUser = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const [userList, setUserList] = useState<UserItem[]>([]);
 
-  // const getUserList = () => {
-  //   fetch("https://fuguilu.us.kg/api/admin/user")
-  //     // fetch("http://localhost:9981/admin/ctr/user")
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       setUserList(res.data);
-  //     });
-  // };
-
-  useEffect(() => {
-    request.get("/admin/user").then((res) => {
-      // console.log("res", res);
+  const getUserList = () => {
+    getAllUser().then((res) => {
       setUserList(res.data);
       dispatch(userSlice.setToken("123456"));
     });
-    // getUserList();
+  };
+
+  useEffect(() => {
+    getUserList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <React.Fragment>
+      <span>token：{stateUser.token}</span>
+
       {userList.map((item, index) => {
         return (
           <div key={index}>
