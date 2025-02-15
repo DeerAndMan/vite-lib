@@ -11,8 +11,9 @@ const Toastify = (props: ToastContainerProps) => {
     <>
       <style>--toastify-toast-padding: 0</style>
       <ToastContainer
+        limit={5}
         position="bottom-left"
-        autoClose={30000}
+        autoClose={3000}
         hideProgressBar
         transition={Slide}
         {...props}
@@ -22,7 +23,3 @@ const Toastify = (props: ToastContainerProps) => {
 };
 
 export default Toastify;
-
-export const CustomToast = () => {
-  return <div>1</div>;
-};

@@ -43,9 +43,9 @@ function App() {
       <Button
         onClick={() => {
           toast.success("我是成功的数据");
-          toast.info("info");
-          toast.warning("warrgin");
-          toast.error("错误");
+          // toast.info("info");
+          // toast.warning("warrgin");
+          // toast.error("错误");
         }}
       >
         Click on
