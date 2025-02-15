@@ -1,11 +1,14 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/store";
 import { userSlice } from "@store/slices";
+
+import { toast } from "./components";
 import "./App.css";
 
 import type { UserItem } from "./type";
-import React from "react";
 import { getAllUser } from "@/api";
+import { Button } from "antd";
 
 function App() {
   const stateUser = useAppSelector((state) => state.user);
@@ -37,7 +40,16 @@ function App() {
           </div>
         );
       })}
-      <p className="read-the-docs">Click on</p>
+      <Button
+        onClick={() => {
+          toast.success("我是成功的数据");
+          toast.info("info");
+          toast.warning("warrgin");
+          toast.error("错误");
+        }}
+      >
+        Click on
+      </Button>
     </React.Fragment>
   );
 }
