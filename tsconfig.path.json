@@ -11,6 +11,21 @@
       "@store/*": [
         "src/store/*"
       ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ],
+      "@router/*": [
+        "src/router/*"
+      ],
+      "@types/*": [
+        "src/types/*"
+      ],
+      "@layouts/*": [
+        "src/layouts/*"
+      ],
     }
   }
 }
