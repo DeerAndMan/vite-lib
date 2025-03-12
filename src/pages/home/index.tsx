@@ -4,7 +4,7 @@ import { userSlice } from "@store/slices";
 import { Button } from "antd";
 
 import { toast } from "@/components";
-import { getAllUser } from "@/api";
+import { userApi } from "@/api";
 
 import type { UserItem } from "@/type";
 
@@ -15,7 +15,7 @@ export const Home = () => {
   const [userList, setUserList] = useState<UserItem[]>([]);
 
   const getUserList = () => {
-    getAllUser().then((res) => {
+    userApi.getAllUser().then((res) => {
       setUserList(res.data);
       dispatch(userSlice.setToken("123456"));
     });
@@ -50,6 +50,6 @@ export const Home = () => {
       </Button>
     </React.Fragment>
   );
-}
+};
 
 export default Home;

@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import { navRouter } from '@/router';
 
-console.log(navRouter);
-
 /**
  * Nav 组件
  * @returns {React.FunctionComponent}
@@ -13,7 +11,7 @@ export const Nav = () => {
         <div>
             {navRouter.map((n, i) => (
                 <Link key={i} to={n.path}>
-                    <Button  type="link">{n.name}</Button>
+                    <Button type="link">{n.name}</Button>
                 </Link>
             ))}
         </div>
