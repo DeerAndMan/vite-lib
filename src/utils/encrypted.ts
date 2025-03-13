@@ -34,8 +34,8 @@ an0+I2Y1dTt2YTW/5jTpha8yNYwVBSi9ahA32SWzrwOyTVjA28U=
  * @param password 密码
  * @returns base64Password 加密后的密码
  */
-export const encryptPassword = (password: string): string => {
-  const saltStr = generateSalt();
+export const encryptPassword = (password: string, saltLen?: number): string => {
+  const saltStr = generateSalt(saltLen);
   // 从证书中提取公钥
   const certificate = pki.certificateFromPem(publicKeyPem);
   // 获取公钥

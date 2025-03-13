@@ -11,8 +11,12 @@ type RequestConfig = {
   noToken?: boolean;
   errorMsg?: boolean;
   successMsg?: string;
+  saltLength?: number;
 };
-type CustomRequestConfig = RequestConfig & InternalAxiosRequestConfig;
+
+export type CustomRequestConfig = RequestConfig & InternalAxiosRequestConfig;
+
+export type PartialCustomRequestConfig = Partial<CustomRequestConfig>;
 
 // console.log("meta.env", import.meta.env.VITE_WEB_BASE_URL);
 const BASE_API = import.meta.env.VITE_WEB_BASE_URL;
@@ -26,8 +30,6 @@ export const request = axios.create({
 // export const setUpInterceptor = () => {
 // 请求拦截器
 request.interceptors.request.use((config: CustomRequestConfig) => {
-  // console.log("config", config);
-
   // 如果需要token
   if (!config.noToken) {
     const stores = store.getState();
@@ -48,6 +50,12 @@ request.interceptors.request.use((config: CustomRequestConfig) => {
   if (config.errorMsg === undefined) {
     config.errorMsg = true;
   }
+
+  if (config.saltLength) {
+    config.headers.SaltLength = config.saltLength;
+  }
+
+  // console.log("config", config);
 
   return config;
 });

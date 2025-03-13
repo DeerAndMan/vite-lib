@@ -14,11 +14,15 @@ type FieldType = {
 export const Login = () => {
   const login = (data: FieldType) => {
     if (!data.username || !data.password) return;
+    // console.log("data", data);
     // 密码加密
-    const encryptedPassword = encryptPassword(data.password);
+    const encryptedPassword = encryptPassword(data.password, 21);
 
     userApi
-      .login({ username: data.username, password: encryptedPassword })
+      .login(
+        { username: data.username, password: encryptedPassword },
+        { saltLength: 21 }
+      )
       .then((res) => {
         console.log("登录成功", res);
       });
