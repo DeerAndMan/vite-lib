@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input } from "antd";
 
+import { toast } from "react-toastify";
 import { encryptPassword } from "@/utils";
 import { userApi } from "@/api";
 
@@ -12,6 +14,8 @@ type FieldType = {
 };
 
 export const Login = () => {
+  const navigator = useNavigate();
+
   const login = (data: FieldType) => {
     if (!data.username || !data.password) return;
     // console.log("data", data);
@@ -24,7 +28,12 @@ export const Login = () => {
         { saltLength: 21 }
       )
       .then((res) => {
-        console.log("登录成功", res);
+        if (res.code === 200) {
+          window.localStorage.setItem("token", res.data);
+          navigator("/", { replace: true });
+        } else {
+          toast.error(res.msg);
+        }
       });
   };
 

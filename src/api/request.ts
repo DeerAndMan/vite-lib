@@ -61,15 +61,15 @@ request.interceptors.request.use((config: CustomRequestConfig) => {
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type ResponseData<T = any> =
-  | {
-      data: T;
-      code: number;
-      msg: string;
-    }
-  | Blob;
+export type ResponseData<T = any> = {
+  data: T;
+  code: number;
+  msg: string;
+};
+// | Blob;
 
-// type ResponseRes = AxiosResponse<any, RequestConfig>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type PromiseResponseData<T = any> = Promise<ResponseData<T>>;
 
 /**
  * 响应拦截器
@@ -88,7 +88,6 @@ request.interceptors.response.use(
       successMsg = config.successMsg;
     }
 
-    /** *************** 如果返回文件流 ************************ */
     if (res.data instanceof Blob) {
       return res;
     }
@@ -119,12 +118,7 @@ request.interceptors.response.use(
 
     // console.log("res.data.code", res.data.code);
     // 登录失效
-    if (
-      res.data.code === 10004 ||
-      res.data.code === 10001 ||
-      res.data.code === 10003
-      // res.data.code === 200
-    ) {
+    if ([10004, 10001, 10003].includes(res.data.code)) {
       // store.dispatch(logout()).then((res) => {
       //   // if (res?.code === 0 && !(window.location.pathname === '/')) {
       //   // 如果不是登录页则跳转到登录页
@@ -138,7 +132,6 @@ request.interceptors.response.use(
       return Promise.reject(new Error(res.data.msg));
     }
 
-    /** *************** 成功情况，返回res.data解决data双层嵌套的问题 ************************ */
     return res.data;
   },
   (error) => {
