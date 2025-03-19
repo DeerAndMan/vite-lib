@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@store/store";
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "@store/store";
 import { userSlice } from "@store/slices";
 import { Button } from "antd";
 
@@ -9,7 +9,7 @@ import { userApi } from "@/api";
 import type { UserItem } from "@/type";
 
 export const Home = () => {
-  const stateUser = useAppSelector((state) => state.user);
+  // const stateUser = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const [userList, setUserList] = useState<UserItem[]>([]);
@@ -17,7 +17,7 @@ export const Home = () => {
   const getUserList = () => {
     userApi.getAllUser().then((res) => {
       setUserList(res.data);
-      dispatch(userSlice.setToken("123456"));
+      dispatch(userSlice.setUser(res.data));
     });
   };
 
@@ -27,9 +27,7 @@ export const Home = () => {
   }, []);
 
   return (
-    <React.Fragment>
-      <span>token：{stateUser.token}</span>
-
+    <div>
       {userList.map((item, index) => {
         return (
           <div key={index}>
@@ -48,7 +46,7 @@ export const Home = () => {
       >
         Click on
       </Button>
-    </React.Fragment>
+    </div>
   );
 };
 

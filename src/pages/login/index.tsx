@@ -3,6 +3,8 @@ import { Button, Checkbox, Form, Input } from "antd";
 
 import { toast } from "react-toastify";
 import { encryptPassword } from "@/utils";
+import { useAppDispatch } from "@/store/store";
+import { userSlice } from "@/store/slices";
 import { userApi } from "@/api";
 
 import type { FormProps } from "antd";
@@ -15,10 +17,10 @@ type FieldType = {
 
 export const Login = () => {
   const navigator = useNavigate();
+  const dispatch = useAppDispatch();
 
   const login = (data: FieldType) => {
     if (!data.username || !data.password) return;
-    // console.log("data", data);
     // 密码加密
     const encryptedPassword = encryptPassword(data.password, 21);
 
@@ -28,8 +30,9 @@ export const Login = () => {
         { saltLength: 21 }
       )
       .then((res) => {
-        if (res.code === 200) {
+        if (res.code === 200 && res.data) {
           window.localStorage.setItem("token", res.data);
+          dispatch(userSlice.setToken(res.data));
           navigator("/", { replace: true });
         } else {
           toast.error(res.msg);
