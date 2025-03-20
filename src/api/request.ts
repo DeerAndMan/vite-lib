@@ -38,17 +38,11 @@ request.interceptors.request.use((config: CustomRequestConfig) => {
   if (!config.noToken) {
     const stores = store.getState();
     const stateUser = stores.user;
-    // console.log("stateUser", stateUser);
 
     if (stateUser?.token) {
       config.headers.Authorization = stateUser?.token;
     }
   }
-
-  // // 当前只有文件上传地址不一样
-  // if (config.url === "/file/upload") {
-  //   // config.baseURL = process.env.REACT_APP_FILE_URL;
-  // }
 
   // 让errorMsg默认生效;
   if (config.errorMsg === undefined) {
@@ -82,6 +76,12 @@ request.interceptors.response.use(
   async (res: AxiosResponse) => {
     const config = res.config as CustomRequestConfig;
     const data = res.data as ResponseData;
+
+    const newToken = res.headers["x-new-token"];
+    if (newToken) {
+      localStorage.setItem("token", newToken);
+      store.dispatch(userSlice.setToken(newToken));
+    }
 
     let errorMsg, successMsg;
     if (config) {
