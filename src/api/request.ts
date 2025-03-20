@@ -4,7 +4,11 @@ import { userSlice } from "@store/slices";
 
 import { message } from "antd";
 
-import type { AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import type {
+  AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
 
 // 自定义请求参数
 type RequestConfig = {
@@ -37,7 +41,7 @@ request.interceptors.request.use((config: CustomRequestConfig) => {
     // console.log("stateUser", stateUser);
 
     if (stateUser?.token) {
-      config.headers.Authorization = "Bearer token" + stateUser?.token;
+      config.headers.Authorization = stateUser?.token;
     }
   }
 
@@ -79,9 +83,6 @@ request.interceptors.response.use(
     const config = res.config as CustomRequestConfig;
     const data = res.data as ResponseData;
 
-    // console.log("res --> config ", config);
-    // console.log("res --->===== data", data);
-
     let errorMsg, successMsg;
     if (config) {
       errorMsg = config.timeoutErrorMessage;
@@ -114,29 +115,29 @@ request.interceptors.response.use(
       }
     }
 
-    /** *************** 失败情况处理 ************************ */
-
-    // console.log("res.data.code", res.data.code);
-    // 登录失效
-    if ([10004, 10001, 10003].includes(res.data.code)) {
-      // store.dispatch(logout()).then((res) => {
-      //   // if (res?.code === 0 && !(window.location.pathname === '/')) {
-      //   // 如果不是登录页则跳转到登录页
-      //   window.location.replace("/");
-      //   // }
-      // });
-
-      // !错误测试，清空store
-      store.dispatch(userSlice.testTokenNull());
-
-      return Promise.reject(new Error(res.data.msg));
-    }
-
     return res.data;
   },
-  (error) => {
-    message.error(error.message);
-    Promise.reject(error?.response?.data || "出错啦");
+  (err: AxiosError) => {
+    message.error(err.message);
+
+    const { status, response } = err;
+    const data = response?.data as ResponseData;
+    // 登录失效
+    const statusList = [401, 403];
+    const tokenErrList = [101, 102, 103];
+    if (
+      status &&
+      statusList.includes(status) &&
+      tokenErrList.includes(data.code)
+    ) {
+      localStorage.removeItem("token");
+      // !错误测试，清空store
+      store.dispatch(userSlice.testTokenNull());
+      Promise.reject(new Error(data.msg));
+      return;
+    }
+
+    Promise.reject(err?.response?.data || "出错啦");
   }
 );
 // };
