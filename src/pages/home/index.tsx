@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "@store/store";
 import { userSlice } from "@store/slices";
-import { Button } from "antd";
+import { Button, Spin } from "antd";
 
-import { toast } from "@/components";
 import { userApi } from "@/api";
 
 import type { UserItem } from "@/type";
@@ -13,12 +12,22 @@ export const Home = () => {
   const dispatch = useAppDispatch();
 
   const [userList, setUserList] = useState<UserItem[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const getUserList = () => {
-    userApi.getAllUser().then((res) => {
-      setUserList(res.data);
-      dispatch(userSlice.setUser(res.data));
-    });
+    setUserList([]);
+    setLoading(true);
+    userApi
+      .getAllUser()
+      .then((res) => {
+        if (res.code === 200) {
+          setUserList(res.data);
+          dispatch(userSlice.setUser(res.data));
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -28,6 +37,7 @@ export const Home = () => {
 
   return (
     <div>
+      <Spin spinning={loading}></Spin>
       {userList.map((item, index) => {
         return (
           <div key={index}>
@@ -36,16 +46,7 @@ export const Home = () => {
           </div>
         );
       })}
-      <Button
-        onClick={() => {
-          toast.success("我是成功的数据");
-          // toast.info("info");
-          // toast.warning("warrgin");
-          // toast.error("错误");
-        }}
-      >
-        Click on
-      </Button>
+      <Button onClick={getUserList}>刷新</Button>
     </div>
   );
 };

@@ -6,9 +6,9 @@ import Layout from "@/layouts";
 
 import type { RouteObject } from "react-router-dom";
 
-export const HomePage = lazy(() => import("@pages/home"));
 export const Login = lazy(() => import("@pages/login"));
-// export const GridShow = lazy(() => import('@/pages/grid/grid-show'));
+export const HomePage = lazy(() => import("@pages/home"));
+export const TradePage = lazy(() => import("@pages/trade"));
 // export const Charts = lazy(() => import('@/pages/charts/charts'));
 // export const GridLayout = lazy(() => import('@/pages/grid/grid-layout'));
 // export const SigmaGraph = lazy(() => import('@/pages/sigma-graph/graph'));
@@ -26,7 +26,7 @@ const routerList: RouteObject[] = [
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/login", element: <Login /> },
-      // { path: '/grid-show', element: <GridShow /> },
+      { path: "/data", element: <TradePage /> },
       // { path: '/charts', element: <Charts /> },
       // { path: '/grid-layout', element: <GridLayout /> },
       // { path: 'sigma-graph', element: <SigmaGraph /> }

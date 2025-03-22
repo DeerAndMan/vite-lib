@@ -15,10 +15,12 @@ export const Nav = () => {
   }
 
   return (
-    <div>
+    <div className="bg-white shadow-md py-3 px-5 mb-5 rounded-md flex items-center space-x-4">
       {navRouter.map((n, i) => (
         <Link key={i} to={n.path}>
-          <Button type="link">{n.name}</Button>
+          <Button type={location.pathname === n.path ? "primary" : "link"}>
+            {n.name}
+          </Button>
         </Link>
       ))}
     </div>

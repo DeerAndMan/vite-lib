@@ -14,4 +14,4 @@ export const login = (
 ): PromiseResponseData =>
   request.post(`${baseUrl}/login`, params, { ...other });
 
-export const getAllUser = () => request.get("/admin/user");
+export const getAllUser = (): PromiseResponseData => request.get("/admin/user");
