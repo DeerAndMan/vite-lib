@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@store/store";
 import { userSlice } from "@store/slices";
 import { Button, Spin } from "antd";
@@ -30,6 +31,11 @@ export const Home = () => {
       });
   };
 
+  const handleLogout = () => {
+    dispatch(userSlice.setUser([]));
+    localStorage.removeItem("token");
+  };
+
   useEffect(() => {
     getUserList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,6 +53,7 @@ export const Home = () => {
         );
       })}
       <Button onClick={getUserList}>刷新</Button>
+      <Button onClick={handleLogout}>登出</Button>
     </div>
   );
 };
