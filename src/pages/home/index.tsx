@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@store/store";
 import { userSlice } from "@store/slices";
 import { Button, Spin } from "antd";
@@ -9,6 +9,7 @@ import { userApi } from "@/api";
 import type { UserItem } from "@/type";
 
 export const Home = () => {
+  const navigate = useNavigate();
   // const stateUser = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
@@ -34,6 +35,7 @@ export const Home = () => {
   const handleLogout = () => {
     dispatch(userSlice.setUser([]));
     localStorage.removeItem("token");
+    navigate("/login", { replace: true });
   };
 
   useEffect(() => {
