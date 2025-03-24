@@ -21,11 +21,11 @@ export const Login = () => {
   const login = (data: FieldType) => {
     if (!data.username || !data.password) return;
     // 密码加密
-    const encryptedPassword = encryptPassword(data.password, 21);
+    const encryptedPassword = encryptPassword(data.password.trim(), 21);
 
     userApi
       .login(
-        { username: data.username, password: encryptedPassword },
+        { username: data.username.trim(), password: encryptedPassword },
         { saltLength: 21 }
       )
       .then((res) => {
