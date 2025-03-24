@@ -1,5 +1,10 @@
 import { Suspense } from "react";
-import { Spin } from "antd";
+import locale from "antd/locale/zh_CN";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
+dayjs.locale("zh-cn");
+
+import { Spin, ConfigProvider } from "antd";
 
 import "./App.css";
 
@@ -8,11 +13,13 @@ import { Router } from "@router/main";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Suspense fallback={<Spin />}>
-        <Router />
-      </Suspense>
-    </BrowserRouter>
+    <ConfigProvider locale={locale}>
+      <BrowserRouter>
+        <Suspense fallback={<Spin />}>
+          <Router />
+        </Suspense>
+      </BrowserRouter>
+    </ConfigProvider>
   );
 }
 

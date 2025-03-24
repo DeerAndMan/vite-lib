@@ -18,6 +18,7 @@ export default function LineChart(props: LineProps) {
     yField: "value",
     point: { shapeField: "square", sizeField: 4 },
     interaction: { tooltip: { marker: false } },
+    slider: { x: {} },
     style: { lineWidth: 2 },
   };
 
