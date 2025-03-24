@@ -50,6 +50,17 @@ export default function Trade() {
       });
   }, [dateTime]);
 
+  const getTradeSummaryData = useCallback(() => {
+    const params = {
+      startTime: dateTime[0].format(dateFormat),
+      endTime: dateTime[1].format(dateFormat),
+    };
+
+    tradeApi.getSummary(params).then((res) => {
+      console.log("res 汇总", res);
+    });
+  }, [dateTime]);
+
   const pickerChange = (val: RangePickerProps["value"]) => {
     if (val instanceof Array) {
       setDateTime([dayjs(val[0]), dayjs(val[1])]);
@@ -62,6 +73,8 @@ export default function Trade() {
 
   useEffect(() => {
     getTradeData();
+    getTradeSummaryData();
+
     let newTimer: NodeJS.Timeout | null = null;
     if (autoRefresh) {
       // message.success("自动刷新已开启");
@@ -82,7 +95,6 @@ export default function Trade() {
 
   return (
     <div className="p-4">
-      Trade
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">数据</h2>
         <Space size="middle">
@@ -101,6 +113,8 @@ export default function Trade() {
           </Space>
         </Space>
       </div>
+      <LineChart data={lineData} />
+      汇总
       <LineChart data={lineData} />
     </div>
   );
