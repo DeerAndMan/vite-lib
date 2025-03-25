@@ -91,7 +91,7 @@ export default function Trade() {
         clearInterval(newTimer);
       }
     };
-  }, [autoRefresh, getTradeData]);
+  }, [autoRefresh, getTradeData, getTradeSummaryData]);
 
   return (
     <div className="p-4">
