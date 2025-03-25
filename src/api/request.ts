@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosRetry from "axios-retry";
 import store from "@/store/store";
 import { userSlice } from "@store/slices";
 
@@ -16,6 +17,7 @@ type RequestConfig = {
   errorMsg?: boolean;
   successMsg?: string;
   saltLength?: number;
+  needRetry?: boolean; // 控制是否需要重试
 };
 
 export type CustomRequestConfig = RequestConfig & InternalAxiosRequestConfig;
@@ -28,6 +30,18 @@ export const request = axios.create({
   baseURL: BASE_API,
   timeout: 300000,
   headers: { Accept: "application/json", "Content-type": "application/json" },
+});
+
+// 重试机制
+axiosRetry(request, {
+  retries: 3,
+  retryDelay: (retryCount) => {
+    return retryCount * 1000;
+  },
+  retryCondition: (error) => {
+    const config = error.config as CustomRequestConfig;
+    return !!config.needRetry && error.response?.status === 500;
+  },
 });
 
 request.interceptors.request.use((config: CustomRequestConfig) => {
