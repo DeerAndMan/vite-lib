@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, message, Space, Switch, DatePicker } from "antd";
+import { Button, message, Space, Switch, DatePicker, Card } from "antd";
 
 import dayjs from "dayjs";
 import { LineChart } from "@/components";
@@ -57,7 +57,7 @@ export default function Trade() {
     };
 
     tradeApi.getSummary(params).then((res) => {
-      console.log("res 汇总", res);
+      console.log("res 汇总 数据！！！", res);
     });
   }, [dateTime]);
 
@@ -95,27 +95,39 @@ export default function Trade() {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">数据</h2>
-        <Space size="middle">
-          <RangePicker
-            maxDate={dayjs()}
-            defaultValue={[dateTime[0], dateTime[1]]}
-            format={dateFormat}
-            onChange={pickerChange}
-          />
-          <Button type="primary" onClick={getTradeData} loading={loading}>
+      <Card>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">数据</h2>
+          <Space size="middle">
+            <RangePicker
+              maxDate={dayjs()}
+              defaultValue={[dateTime[0], dateTime[1]]}
+              format={dateFormat}
+              onChange={pickerChange}
+            />
+            <Button type="primary" onClick={getTradeData} loading={loading}>
+              立即刷新
+            </Button>
+            <Space>
+              <span>自动刷新：</span>
+              <Switch checked={autoRefresh} onChange={toggleAutoRefresh} />
+            </Space>
+          </Space>
+        </div>
+        <LineChart data={lineData} />
+      </Card>
+      <Card>
+        <Space>
+          <Button
+            type="primary"
+            onClick={getTradeSummaryData}
+            loading={loading}
+          >
             立即刷新
           </Button>
-          <Space>
-            <span>自动刷新：</span>
-            <Switch checked={autoRefresh} onChange={toggleAutoRefresh} />
-          </Space>
         </Space>
-      </div>
-      <LineChart data={lineData} />
-      汇总
-      <LineChart data={lineData} />
+        <LineChart data={lineData} />
+      </Card>
     </div>
   );
 }
