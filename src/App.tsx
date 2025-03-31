@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 dayjs.locale("zh-cn");
 
-import { Spin, ConfigProvider } from "antd";
+import { ConfigProvider } from "antd";
 
 import "./App.css";
 
@@ -15,7 +15,9 @@ function App() {
   return (
     <ConfigProvider locale={locale}>
       <BrowserRouter>
-        <Suspense fallback={<Spin />}>
+        <Suspense
+          fallback={<span className="loading loading-infinity loading-xl" />}
+        >
           <Router />
         </Suspense>
       </BrowserRouter>

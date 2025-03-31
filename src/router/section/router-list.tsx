@@ -1,6 +1,5 @@
 import { Suspense, lazy } from "react";
 import { Outlet } from "react-router-dom";
-import { Spin } from "antd";
 
 import Layout from "@/layouts";
 
@@ -17,7 +16,9 @@ const routerList: RouteObject[] = [
   {
     element: (
       <Layout>
-        <Suspense fallback={<Spin />}>
+        <Suspense
+          fallback={<span className="loading loading-infinity loading-xl" />}
+        >
           <Outlet />
         </Suspense>
       </Layout>

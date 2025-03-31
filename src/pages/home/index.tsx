@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@store/store";
 import { userSlice } from "@store/slices";
-import { Button, Spin } from "antd";
 
 import { userApi } from "@/api";
 
@@ -45,7 +44,7 @@ export const Home = () => {
 
   return (
     <div>
-      <Spin spinning={loading}></Spin>
+      {loading && <span className="loading loading-infinity loading-xl"></span>}
       {userList.map((item, index) => {
         return (
           <div key={index}>
@@ -54,8 +53,15 @@ export const Home = () => {
           </div>
         );
       })}
-      <Button onClick={getUserList}>刷新</Button>
-      <Button onClick={handleLogout}>登出</Button>
+      <button className="btn btn-soft btn-sm" onClick={getUserList}>
+        刷新
+      </button>
+      <button
+        className="btn btn-active btn-sm btn-secondary"
+        onClick={handleLogout}
+      >
+        登出
+      </button>
     </div>
   );
 };

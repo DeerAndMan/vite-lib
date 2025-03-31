@@ -1,5 +1,4 @@
 import { Link, useLocation } from "react-router-dom";
-import { Button } from "antd";
 import { navRouter } from "@/router";
 
 /**
@@ -18,9 +17,13 @@ export const Nav = () => {
     <div className="bg-white shadow-md py-3 px-5 mb-5 rounded-md flex items-center space-x-4">
       {navRouter.map((n, i) => (
         <Link key={i} to={n.path}>
-          <Button type={location.pathname === n.path ? "primary" : "link"}>
+          <button
+            className={`btn btn-sm ${
+              location.pathname === n.path ? "btn-primary" : "btn-ghost"
+            }`}
+          >
             {n.name}
-          </Button>
+          </button>
         </Link>
       ))}
     </div>

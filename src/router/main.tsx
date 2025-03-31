@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { useRoutes, Outlet, Navigate } from "react-router-dom";
-import { Spin } from "antd";
 
 import routerList from "./section/router-list";
 
@@ -11,7 +10,9 @@ const layoutRouter: RouteObject[] = [
   {
     element: (
       <div>
-        <Suspense fallback={<Spin />}>
+        <Suspense
+          fallback={<span className="loading loading-infinity loading-xl" />}
+        >
           <Outlet />
         </Suspense>
       </div>
