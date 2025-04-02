@@ -23,11 +23,11 @@ export default function DualAxesChart(props: DualAxesProps) {
         type: "line",
         yField: "value",
         style: { stroke: "#5B8FF9", lineWidth: 2 },
-        point: {
-          shapeField: "plus",
-          sizeField: 4,
-          style: { fill: "#5B8FF9", stroke: "#5B8FF9" },
-        },
+        // point: {
+        //   shapeField: "plus",
+        //   sizeField: 4,
+        //   style: { fill: "#5B8FF9", stroke: "#5B8FF9" },
+        // },
         colorField: "type",
         axis: {
           y: {
@@ -41,11 +41,11 @@ export default function DualAxesChart(props: DualAxesProps) {
         type: "line",
         yField: "proportion",
         style: { stroke: "#E74C3C", lineWidth: 2 },
-        point: {
-          shapeField: "triangle",
-          sizeField: 4,
-          style: { fill: "#E74C3C", stroke: "#E74C3C" },
-        },
+        // point: {
+        //   shapeField: "triangle",
+        //   sizeField: 4,
+        //   style: { fill: "#E74C3C", stroke: "#E74C3C" },
+        // },
         itemStyle: {
           fill: "#E74C3C",
         },
