@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Button, message, Space, Switch, DatePicker, Card } from "antd";
 
 import dayjs from "dayjs";
-import { LineChart } from "@/components";
+import { DualAxesChart, LineChart } from "@/components";
 import { tradeApi } from "@/api";
 
 import type { RangePickerProps } from "antd/es/date-picker";
@@ -10,6 +10,10 @@ import type { RangePickerProps } from "antd/es/date-picker";
 interface LineItem {
   time: string;
   value: number;
+  proportion: number;
+}
+interface LineTypeItem extends Omit<LineItem, "proportion"> {
+  type: string;
 }
 
 const { RangePicker } = DatePicker;
@@ -17,6 +21,7 @@ const dateFormat = "YYYY-MM-DD";
 
 export default function Trade() {
   const [lineData, setLineData] = useState<LineItem[]>([]);
+  const [lineTypeData, setLineTypeData] = useState<LineTypeItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [dateTime, setDateTime] = useState([
@@ -37,28 +42,30 @@ export default function Trade() {
       .then((res) => {
         if (res.code !== 200) return;
         const list: LineItem[] = [];
+        const listType: LineTypeItem[] = [];
+
         res.data.forEach((l) => {
+          const time = dayjs(l.date).format("YYYY-MM-DD hh:mm:ss");
           list.push({
-            time: dayjs(l.date).format("YYYY-MM-DD hh:mm:ss"),
-            value: l.dryk ? Number(l.dryk) : 0,
+            time,
+            value: Number(l.dryk),
+            proportion: Number(l.drhz) * 100,
+          });
+          l.positions.forEach((p) => {
+            listType.push({
+              time,
+              type: p.Zqmc,
+              value: Number(p.Dryk),
+            });
           });
         });
+
         setLineData(list);
+        setLineTypeData(listType);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [dateTime]);
-
-  const getTradeSummaryData = useCallback(() => {
-    const params = {
-      startTime: dateTime[0].format(dateFormat),
-      endTime: dateTime[1].format(dateFormat),
-    };
-
-    tradeApi.getSummary(params).then((res) => {
-      console.log("res 汇总 数据！！！", res);
-    });
   }, [dateTime]);
 
   const pickerChange = (val: RangePickerProps["value"]) => {
@@ -73,11 +80,9 @@ export default function Trade() {
 
   useEffect(() => {
     getTradeData();
-    getTradeSummaryData();
 
     let newTimer: NodeJS.Timeout | null = null;
     if (autoRefresh) {
-      // message.success("自动刷新已开启");
       newTimer = setInterval(() => {
         getTradeData();
       }, 1000 * 60 * 3);
@@ -91,7 +96,7 @@ export default function Trade() {
         clearInterval(newTimer);
       }
     };
-  }, [autoRefresh, getTradeData, getTradeSummaryData]);
+  }, [autoRefresh, getTradeData]);
 
   return (
     <div className="p-4">
@@ -114,19 +119,8 @@ export default function Trade() {
             </Space>
           </Space>
         </div>
-        <LineChart data={lineData} />
-      </Card>
-      <Card>
-        <Space>
-          <Button
-            type="primary"
-            onClick={getTradeSummaryData}
-            loading={loading}
-          >
-            立即刷新
-          </Button>
-        </Space>
-        <LineChart data={lineData} />
+        <DualAxesChart data={lineData} />
+        <LineChart data={lineTypeData} />
       </Card>
     </div>
   );

@@ -3,6 +3,7 @@ import { Line } from "@ant-design/charts";
 interface LineDataItem {
   time: string;
   value: number;
+  type: string;
 }
 
 export interface LineProps {
@@ -16,6 +17,7 @@ export default function LineChart(props: LineProps) {
     data,
     xField: "time",
     yField: "value",
+    colorField: "type",
     point: { shapeField: "square", sizeField: 4 },
     interaction: { tooltip: { marker: false } },
     slider: { x: {} },

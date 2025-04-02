@@ -15,5 +15,5 @@ export const getTrade = (
 
 export const getSummary = (
   params: TradeParams
-): PromiseResponseData<TradeItem[]> =>
+): PromiseResponseData<TradeItem> =>
   request.post(apiControl.trade.summary, params);
